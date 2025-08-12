@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Pega a string de conexão do seu ficheiro .env
+// Pega a string de conexão do seu ficheiro .envv
 const db = process.env.MONGO_URI;
 
 const connectDB = async () => {
