@@ -1,8 +1,5 @@
-// ARQUIVO server.js PARA TESTE DE DEPURAÇÃO
-
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
-
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
@@ -12,26 +9,20 @@ connectDB();
 
 const app = express();
 
-const corsOptions = {
-  origin: "*",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-  allowedHeaders: "Content-Type, Authorization",
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); 
+// Middlewares
+app.use(cors());
 app.use(express.json({ extended: false }));
 
 // Rota de teste
-app.get('/', (req, res) => res.send('API VitaLog - TESTE DE DEPURAÇÃO'));
+app.get('/', (req, res) => res.send('API VitaLog está a funcionar!'));
 
-// --- INÍCIO DO TESTE ---
-// Estamos a carregar apenas UM ficheiro de rotas de cada vez.
+console.log('Express version:', require('express/package.json').version);
+console.log('path-to-regexp version:', require('path-to-regexp/package.json').version);
+// Rotas da Aplicação
 app.use('/api/auth', require('./routes/auth'));
-// app.use('/api/medications', require('./routes/medications'));
-// app.use('/api/interactions', require('./routes/interactions'));
-// app.use('/api/chatbot', require('./routes/chatbot'));
-// --- FIM DO TESTE ---
+app.use('/api/medications', require('./routes/medications'));
+app.use('/api/interactions', require('./routes/interactions'));
+app.use('/api/chatbot', require('./routes/chatbot'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Servidor a rodar na porta ${PORT}`));
