@@ -24,7 +24,8 @@ console.log('path-to-regexp version:', require('path-to-regexp/package.json').ve
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/medications', require('./routes/medications'));
 app.use('/api/interactions', require('./routes/interactions'));
-app.use('/api/chatbot', require('./routes/chatbot'));
+app.use('/chatbot', require('./routes/chatbot'));
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Servidor a rodar na porta ${PORT}`));
