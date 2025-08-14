@@ -1,5 +1,6 @@
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
@@ -9,9 +10,16 @@ connectDB();
 
 const app = express();
 
-// ✅ CORS configurado para aceitar requisições do frontend
+// 🔐 CORS apenas para produção
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://seu-frontend.render.com'], // substitua com o domínio real do frontend
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -30,4 +38,4 @@ app.use('/', require('./routes/chatbot'));
 
 // Porta
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Servidor a rodar na porta ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));
