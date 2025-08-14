@@ -9,8 +9,14 @@ connectDB();
 
 const app = express();
 
-// Middlewares
-app.use(cors());
+// ✅ CORS configurado para aceitar requisições do frontend
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://seu-frontend.render.com'], // substitua com o domínio real do frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
+// Middleware para interpretar JSON
 app.use(express.json({ extended: false }));
 
 // Rota de teste
@@ -20,9 +26,8 @@ app.get('/', (req, res) => res.send('API VitaLog está a funcionar!'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/medications', require('./routes/medications'));
 app.use('/api/interactions', require('./routes/interactions'));
-
-// 🔄 Atualização aqui: rota direta para /ask
 app.use('/', require('./routes/chatbot'));
 
+// Porta
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Servidor a rodar na porta ${PORT}`));
